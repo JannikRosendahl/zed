@@ -716,25 +716,26 @@ impl NotebookEditor {
     }
 
     fn open_notebook(&mut self, _: &OpenNotebook, _window: &mut Window, _cx: &mut Context<Self>) {
-        println!("Open notebook triggered");
     }
 
-    fn move_cell_up(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        println!("Move cell up triggered");
+    fn move_cell_up(&mut self, _window: &mut Window, cx: &mut Context<Self>) {
         if self.selected_cell_index > 0 {
             self.cell_order
                 .swap(self.selected_cell_index, self.selected_cell_index - 1);
             self.selected_cell_index -= 1;
+            self.cell_list
+                .scroll_to_reveal_item(self.selected_cell_index);
             cx.notify();
         }
     }
 
-    fn move_cell_down(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        println!("Move cell down triggered");
+    fn move_cell_down(&mut self, _window: &mut Window, cx: &mut Context<Self>) {
         if !self.cell_order.is_empty() && self.selected_cell_index < self.cell_order.len() - 1 {
             self.cell_order
                 .swap(self.selected_cell_index, self.selected_cell_index + 1);
             self.selected_cell_index += 1;
+            self.cell_list
+                .scroll_to_reveal_item(self.selected_cell_index);
             cx.notify();
         }
     }

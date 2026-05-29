@@ -624,7 +624,15 @@ impl Render for MarkdownCell {
                                 window.focus(&this.editor.focus_handle(cx), cx);
                                 cx.notify();
                             }))
-                            .child(MarkdownElement::new(self.markdown.clone(), style)),
+                            .when(self.source.is_empty(), |this| {
+                                this.child(
+                                    Label::new("Empty markdown block. Click to edit.")
+                                        .color(Color::Placeholder),
+                                )
+                            })
+                            .when(!self.source.is_empty(), |this| {
+                                this.child(MarkdownElement::new(self.markdown.clone(), style))
+                            }),
                     ),
             )
             .children(self.cell_position_spacer(false, window, cx))
